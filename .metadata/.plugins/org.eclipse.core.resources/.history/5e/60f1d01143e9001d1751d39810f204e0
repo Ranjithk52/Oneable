@@ -1,0 +1,10 @@
+package com.ojas.spring.service;
+
+import com.ojas.spring.model.GitIntegration;
+
+public interface GitService {
+	
+	public String createRecord(GitIntegration integration);
+	
+
+}

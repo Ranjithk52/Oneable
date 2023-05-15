@@ -1,0 +1,82 @@
+package com.ojas.spring.controller;
+
+import java.io.IOException;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ojas.spring.model.Branches;
+import com.ojas.spring.model.GitIntegration;
+import com.ojas.spring.service.GitServiceImpl;
+
+@RestController
+@RequestMapping("/gitcontent")
+public class GitContent {
+	@Autowired
+	private GitServiceImpl gitServiceImpl;
+	
+	 @PostMapping("/getcode")
+	public  String getGitContent(@RequestBody GitIntegration gitIntegration) throws IOException {
+	    
+		return gitServiceImpl.getGitContent(gitIntegration);
+	}
+	 
+	 
+	 @PostMapping("/nooflines")
+	 public  int getNoOfLines(@RequestBody GitIntegration gitIntegration)  throws IOException {
+		 
+		 return gitServiceImpl.getNoOfLines(gitIntegration);
+		 
+	 }
+	
+	 
+	 @PostMapping("/branches") 
+	 public List<Branches> getBranchCount(@RequestBody GitIntegration gitIntegration) throws IOException {
+		 
+		 
+		 return gitServiceImpl.getBranchCount(gitIntegration);
+	 }
+	 
+	 
+
+	@PostMapping("/commits") 
+	public int getTotalChanges(@RequestBody GitIntegration integration) throws IOException {
+		
+		return gitServiceImpl.getTotalChanges(integration);
+	}
+	
+	@PostMapping("/reviewcomments") 
+	   public List<String> getCodeReviewComments(@RequestBody GitIntegration integration) throws IOException{
+		
+		return gitServiceImpl.getCodeReviewComments(integration);
+	}
+	
+	@PostMapping("/changes")
+	public List<String> fetchCommitChanges(@RequestBody GitIntegration integration) throws IOException {
+		
+		return gitServiceImpl.fetchCommitChanges(integration);
+		
+	}
+
+	
+}   
+	
+	
+	
+		
+	
+
+	
+		
+		
+		
+		
+
+
+	
+
+

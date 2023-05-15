@@ -1,0 +1,23 @@
+package com.ojas.mongo.model;
+
+public class Data {
+	private String trustStore;
+	private String serverProtocol;
+	private String serverAddress;
+	private String serverPort;
+	private String securityPrincipal;
+	private String baseName;
+	private String authenticationAttribute;
+	private String securityCredentials;
+	private String managerCNAttribute;
+	private String userObjectClass;
+	private String firstNameAttribute;
+	private String lastNameAttribute;
+	private String photoAttribute;
+	private String emailAttribute;
+	private String employeeIdAttribute;
+	private String titleAttribute;
+	private String departmentIdAttribute;
+	private String _class;
+	
+}

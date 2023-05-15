@@ -1,0 +1,76 @@
+package com.ojas.spring.git;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+
+//public class GitBranchLister {
+//
+//    public static void main(String[] args) throws IOException, GitAPIException {
+//        File repoDir = new File("/path/to/your/repository");
+//        Git git = Git.open(repoDir);
+//
+//        List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
+//
+//        for (Ref branch : branches) {
+//            System.out.println("Branch: " + branch.getName());
+//        }
+//
+//        git.close();
+//    }
+//}
+
+import org.eclipse.jgit.api.LsRemoteCommand;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import java.util.List;
+
+import org.eclipse.jgit.api.LsRemoteCommand;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+
+public class GitBranchLister {
+    public static void main(String[] args) throws IOException, GitAPIException {
+        // Replace with your GitHub username and password
+        String username = "Ranjithk52";
+        String password = "Udwitha@2019";
+
+        // Clone the repository
+        Git git = Git.cloneRepository()
+                .setURI("https://github.com/Ranjithk52/your_repository.git")
+                .setCredentialsProvider(new UsernamePasswordCredentialsProvider(username, password))
+                .setDirectory(new File("/path/to/local/repository"))
+                .call();
+
+        // Get the branches in the repository
+        List<Ref> branches = git.branchList().call();
+
+        // Print the branch names
+        for (Ref branch : branches) {
+            System.out.println(branch.getName());
+        }
+
+        // Close the repository
+        git.close();
+    }
+}
+

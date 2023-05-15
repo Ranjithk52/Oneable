@@ -1,0 +1,67 @@
+package com.ojas.spring.model;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+public class GitIntegration {
+	
+	private int id;
+ 	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public void setSha(String sha) {
+		this.sha = sha;
+	}
+	private   String user;
+	private  String repo;
+	private  String path ;
+	private  String accessToken ;
+	//private String remoteRepoUrl;
+	private String branchName;
+	private String sha;
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
+	public String getRepo() {
+		return repo;
+	}
+	public void setRepo(String repo) {
+		this.repo = repo;
+	}
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
+	public String getAccessToken() {
+		return accessToken;
+	}
+	public void setAccessToken(String accessToken) {
+		this.accessToken = accessToken;
+	}
+//	public String getRemoteRepoUrl() {
+//		return remoteRepoUrl;
+//	}
+//	public void setRemoteRepoUrl(String remoteRepoUrl) {
+//		this.remoteRepoUrl = remoteRepoUrl;
+//	}
+	public String getBranchName() {
+		return branchName;
+	}
+	public void setBranchName(String branchName) {
+		this.branchName = branchName;
+	}
+	public String getSha() {
+		return sha;
+	}
+	
+	
+
+}

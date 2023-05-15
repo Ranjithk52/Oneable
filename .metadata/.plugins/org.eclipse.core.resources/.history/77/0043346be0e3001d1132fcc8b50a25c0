@@ -1,0 +1,69 @@
+package com.ojas.spring.git;
+
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+
+public class GitHubChangesFetcher {
+    
+    private static final String REPO_OWNER = "owner"; // replace with repository owner
+    private static final String REPO_NAME = "repo-name"; // replace with repository name
+    private static final String ACCESS_TOKEN = "your-github-access-token"; // replace with your GitHub access token
+    
+    public static void main(String[] args) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        
+        // Build the URL to fetch the commit information
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("https")
+                .host("api.github.com")
+                .addPathSegment("repos")
+                .addPathSegment(REPO_OWNER)
+                .addPathSegment(REPO_NAME)
+                .addPathSegment("commits")
+                .build();
+        
+        // Build the request with the authorization header
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + ACCESS_TOKEN)
+                .build();
+        
+        // Execute the request and parse the response JSON
+        Response response = client.newCall(request).execute();
+        JSONArray commitsJsonArray = new JSONArray(response.body().string());
+        
+        // Loop through the commits and fetch the file changes
+        for (int i = 0; i < commitsJsonArray.length(); i++) {
+            JSONObject commitJson = commitsJsonArray.getJSONObject(i);
+            String commitUrl = commitJson.getString("url");
+            
+            // Build the request to fetch the commit information
+            Request commitRequest = new Request.Builder()
+                    .url(commitUrl)
+                    .addHeader("Authorization", "Bearer " + ACCESS_TOKEN)
+                    .build();
+            
+            // Execute the request and parse the response JSON
+            Response commitResponse = client.newCall(commitRequest).execute();
+            JSONObject commitInfoJson = new JSONObject(commitResponse.body().string());
+            
+            JSONArray filesJsonArray = commitInfoJson.getJSONArray("files");
+            
+            // Loop through the files and print their path and changes
+            for (int j = 0; j < filesJsonArray.length(); j++) {
+                JSONObject fileJson = filesJsonArray.getJSONObject(j);
+                String filePath = fileJson.getString("filename");
+                int additions = fileJson.getInt("additions");
+                int deletions = fileJson.getInt("deletions");
+                
+                System.out.println(filePath + ": +" + additions + " -" + deletions);
+            }
+        }
+    }
+}

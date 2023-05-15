@@ -1,0 +1,153 @@
+package com.ojas.spring.controller;
+
+import java.io.IOException;
+import java.util.Base64;
+
+import javax.mail.internet.MimeUtility;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+
+import com.ojas.spring.model.GitIntegration;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+@RestController
+@RequestMapping("/gitcontent")
+public class GitContent {
+	
+	private static final String GitHub_Api_BASEURL = "https://api.github.com/";
+	 @PostMapping("/getcode")
+	private static String getGitContent(@RequestBody GitIntegration gitIntegration) throws IOException {
+	    String user = gitIntegration.getUser();
+        String repo = gitIntegration.getRepo();
+        String path = gitIntegration.getPath();
+
+        String accessToken =gitIntegration.getAccessToken();
+        OkHttpClient client = new OkHttpClient();
+
+
+        String url=GitHub_Api_BASEURL+"repos/"+user+"/"+repo+"/contents/"+path;
+		Request request=new Request.Builder()
+		.url(url)
+		.header("Authorization", "Bearer"+accessToken)
+		.build();
+
+        Response response = client.newCall(request).execute();
+
+        if (response.isSuccessful()) {
+            String responseData = response.body().string();
+            Gson gson = new Gson();
+            FileContent fileContent = gson.fromJson(responseData, FileContent.class);
+            String fileContentEncoded = MimeUtility.decodeText(fileContent.getContent());
+            fileContentEncoded = fileContentEncoded.replaceAll("[^A-Za-z0-9+/=]", "");
+          
+          // Decode the Base64 string
+          byte[] decodedBytes = Base64.getDecoder().decode(fileContentEncoded);
+         
+            
+            String fileContentDecoded = new String(decodedBytes);
+           
+            System.out.println("File Content:\n" + fileContentDecoded);
+            
+         
+            // process the file content as needed
+            return fileContentDecoded;
+        } else {
+            System.out.println("Error: " + response.code() + " - " + response.message());
+            return "Error: " + response.code() + " - " + response.message();
+        }
+		
+	}
+	 
+	 
+	 @RequestMapping("/nooflines")
+	 private static int getNoOfLines(@RequestBody GitIntegration gitIntegration)  throws IOException {
+		    String user = gitIntegration.getUser();
+	        String repo = gitIntegration.getRepo();
+	        String path = gitIntegration.getPath();
+
+	        String accessToken =gitIntegration.getAccessToken();
+	        OkHttpClient client = new OkHttpClient();
+     
+	        String url=GitHub_Api_BASEURL+"repos/"+user+"/"+repo+"/contents/"+path;
+			Request request=new Request.Builder()
+			.url(url)
+			.header("Authorization", "Bearer"+accessToken)
+			.build();
+
+	        Response response = client.newCall(request).execute();
+	 
+	        if (response.isSuccessful()) {
+	            String responseData = response.body().string();
+	            Gson gson = new Gson();
+	            FileContent fileContent = gson.fromJson(responseData, FileContent.class);
+	            String fileContentEncoded = MimeUtility.decodeText(fileContent.getContent());
+	            fileContentEncoded = fileContentEncoded.replaceAll("[^A-Za-z0-9+/=]", "");
+	          
+	          // Decode the Base64 string
+	          byte[] decodedBytes = Base64.getDecoder().decode(fileContentEncoded);
+	         
+	            
+	            String fileContentDecoded = new String(decodedBytes);
+	            System.out.println("File Content:\n" + fileContentDecoded);
+	            String[] lines = fileContentDecoded.split("\r?\n");
+
+	         // Print number of lines
+	         System.out.println("Number of lines: " + lines.length);
+	         
+	            // process the file content as needed
+	            return lines.length;
+	        } else {
+	            System.out.println("Error: " + response.code() + " - " + response.message());
+	            return response.code();
+	        }
+		 
+			
+			
+			
+			
+		}
+	 public static class FileContent {
+	        private String name;
+	        private String path;
+	        private String sha;
+	        private String content;
+
+	        public String getName() {
+	            return name;
+	        }
+
+	        public String getPath() {
+	            return path;
+	        }
+
+	        public String getSha() {
+	            return sha;
+	        }
+
+	        public String getContent() {
+	            return content;
+	        }
+	    }
+	 
+	 
+	 
+   
+}
+   
+		
+		
+		
+		
+
+
+	
+
+

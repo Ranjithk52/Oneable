@@ -1,0 +1,65 @@
+package com.ojas.spring.git;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import okhttp3.*;
+
+import java.io.IOException;
+import java.util.List;
+
+public class GitHubChangesFetcher {
+    
+    private static final String REPO_OWNER = "Ranjithk52"; // replace with repository owner
+    private static final String REPO_NAME = "Practice"; // replace with repository name
+    private static final String ACCESS_TOKEN = "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"; // replace with your GitHub access token
+    
+    public static void main(String[] args) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        
+        String url = "https://api.github.com/repos/" + REPO_OWNER + "/" + REPO_NAME + "/commits";
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + ACCESS_TOKEN)
+                .build();
+        
+        Response response = client.newCall(request).execute();
+        String responseBody = response.body().string();
+        
+        Gson gson = new Gson();
+        List<GitHubCommit> commits = gson.fromJson(responseBody, new TypeToken<List<GitHubCommit>>() {}.getType());
+        
+        for (GitHubCommit commit : commits) {
+            System.out.println("Commit SHA: " + commit.sha);
+            System.out.println("Author: " + commit.commit.author.name);
+            System.out.println("Date: " + commit.commit.author.date);
+            System.out.println("Message: " + commit.commit.message);
+            System.out.println("Files:");
+            for (GitHubFile file : commit.files) {
+                System.out.println("\t" + file.filename + " (" + file.status + ")");
+            }
+            System.out.println();
+        }
+    }
+    
+    private static class GitHubCommit {
+        String sha;
+        Commit commit;
+        List<GitHubFile> files;
+    }
+    
+    private static class Commit {
+        CommitAuthor author;
+        String message;
+    }
+    
+    private static class CommitAuthor {
+        String name;
+        String date;
+    }
+    
+    private static class GitHubFile {
+        String filename;
+        String status;
+    }
+}

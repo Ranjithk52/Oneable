@@ -1,0 +1,14 @@
+package com.ojas.spring.model;
+
+public class FileContent {
+    
+    private String content;
+    private String body;
+    public String getContent() {
+        return content;
+    }
+	public String getBody() {
+		return body;
+	}
+	
+}

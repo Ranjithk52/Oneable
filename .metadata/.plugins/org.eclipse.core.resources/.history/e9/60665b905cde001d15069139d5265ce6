@@ -1,0 +1,32 @@
+package com.ojas.spring.git;
+
+import java.io.IOException;
+import org.kohsuke.github.GHCommit;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
+import org.kohsuke.github.GitHubBuilder;
+
+public class GitHubChangesCounter {
+    public static void main(String[] args) throws IOException {
+        String owner = "Ranjithk52";
+        String repoName = "Practice";
+        String branchName = "master";
+        String token = "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";
+        int numChanges = getNumChanges(owner, repoName, branchName, token);
+        System.out.println("Number of changes: " + numChanges);
+    }
+    
+    public static int getNumChanges(String owner, String repoName, String branchName, String token) throws IOException {
+        GitHub github = new GitHubBuilder().withOAuthToken(token).build();
+        try {
+            GHRepository repo = github.getRepository(owner + "/" + repoName);
+            GHCommit branchCommit = repo.getCommit(branchName);
+            int numChanges = branchCommit.getFiles().size();
+            return numChanges;
+        } finally {
+            if (github != null) {
+                github.getClass();
+            }
+        }
+    }
+}

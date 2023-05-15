@@ -1,0 +1,23 @@
+package com.ojas.spring.git;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class HashMapConcept {
+
+	public static void main(String[] args) {
+		Map<String,Integer> marks=new HashMap<String,Integer>();
+		marks.put("Rajesh", 100);
+		marks.put("Mahesh", 120);
+		marks.put("Suresh", 100);
+		marks.put("Akash", 100);
+		marks.put("Anil", 100);
+		marks.put("Pawan", 100);
+		System.out.println(marks);
+		
+	}
+
+}

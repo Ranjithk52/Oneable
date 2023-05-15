@@ -1,0 +1,59 @@
+package com.ojas.spring.git;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.egit.github.core.Comment;
+import org.eclipse.egit.github.core.Issue;
+import org.eclipse.egit.github.core.service.IssueService;
+
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.ojas.spring.model.FileContent;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class GitCodeReviewComments {
+	static String GitHub_Api_BASEURL = "https://api.github.com/";
+    
+
+	   static  String user = "Ranjithk52"; 
+	   //static  String user = "HarishMamidala104"; 
+	   static String repo = "Practice"; 
+	   static String path = "src/main/java/com/ojas1/Calculate.java";
+
+	   static String accessToken = "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";
+
+
+
+	   public static void main(String[] args) throws IOException {
+		   OkHttpClient client = new OkHttpClient(); 
+			 //List<FileContent> files=null; 
+			 String url = GitHub_Api_BASEURL + "repos/" + user + "/" + repo + "/pulls/2"; 
+			 Request request = new Request.Builder() 
+					 .url(url) 
+					 .header("Authorization", "token " + accessToken) 
+					 .build(); 
+			
+			 Response response = client.newCall(request).execute(); 
+			 //System.out.println(response);
+			
+			 if (response.isSuccessful()) { 
+		    String responseData = response.body().string(); 
+		    System.out.println(responseData);
+		    Gson gson = new Gson();
+		    
+		    FileContent fileContent = gson.fromJson(responseData, FileContent.class);
+		    System.out.println(fileContent.getBody());
+		    
+		    
+	 }
+
+	   }
+}

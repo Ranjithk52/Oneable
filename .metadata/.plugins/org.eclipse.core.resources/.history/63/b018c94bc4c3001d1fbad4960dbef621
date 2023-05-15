@@ -1,0 +1,43 @@
+package com.ojas.socket;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.net.Socket;
+import java.util.Scanner;
+
+public class ServerClientThread extends Thread{
+    Socket serverClient;
+    int clientNo;
+    int squre;
+    ServerClientThread(Socket inSocket,int counter){
+        serverClient=inSocket;
+        clientNo=counter;
+    }
+    public void run() {
+        try {
+            DataInputStream inStream=new DataInputStream(serverClient.getInputStream());
+            DataOutputStream outStream=new DataOutputStream(serverClient.getOutputStream());
+            String clientMessage="",serverMessage="";
+            while(!clientMessage.equals("bye")) {
+                clientMessage=inStream.readUTF();
+                System.out.println("From Client-" +clientNo+ ": Message is :"+clientMessage);
+                //squre=Integer.parseInt(clientMessage)*Integer.parseInt(clientMessage);
+                //serverMessage="From Server to CLient-" +clientNo+" Square of "+clientMessage+" is "+squre;
+//                Scanner sc=new Scanner(System.in);
+//                System.out.println("Send message to client");
+                serverMessage="From Server to CLient-" +clientNo+" Message is :Hi ..";
+                        outStream.writeUTF(serverMessage);
+                outStream.flush();
+            }
+            inStream.close();
+            outStream.close();
+            serverClient.close();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }finally {
+            System.out.println("CLient -" +clientNo +" exit!! ");
+        }
+    }
+}

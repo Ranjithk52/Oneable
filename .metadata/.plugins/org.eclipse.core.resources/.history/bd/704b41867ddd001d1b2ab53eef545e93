@@ -1,0 +1,37 @@
+package com.ojas.spring.controller;
+
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Ref;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
+import java.io.IOException;
+
+public class GitChangesCounter {
+    public static int getNumberOfChanges(String remoteRepoUrl, String branchName) throws IOException, GitAPIException {
+        try (Repository repository = new FileRepositoryBuilder().setGitDir(new File(".git")).build()) {
+            Git git = new Git(repository);
+
+            // Fetch the remote repository
+            git.fetch()
+                .setRemote(remoteRepoUrl)
+                .setRefSpecs("refs/heads/" + branchName + ":refs/remotes/origin/" + branchName)
+                .call();
+
+            // Get the commit IDs for the branch in question
+            Ref ref = repository.findRef("refs/remotes/origin/" + branchName);
+            ObjectId oldHead = ref.getObjectId();
+            ObjectId newHead = repository.resolve("HEAD");
+
+            // Count the number of changes
+            int numberOfChanges = git.diff()
+                .setOldTree(git.getRepository().parseTree(oldHead))
+                .setNewTree(git.getRepository().parseTree(newHead))
+                .call()
+                .size();
+
+            return numberOfChanges;
+        }
+    }
+}

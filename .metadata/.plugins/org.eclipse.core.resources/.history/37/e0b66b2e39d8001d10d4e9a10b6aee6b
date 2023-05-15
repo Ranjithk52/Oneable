@@ -1,0 +1,24 @@
+package com.ojas.spring.mail;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+
+public class MailSender {
+
+	
+	
+		
+		public static void main(String[] args) {
+		 JavaMailSender javaMailSender=(JavaMailSender) new MailSender();
+			SimpleMailMessage mail=new SimpleMailMessage();
+			mail.setFrom("ranjith.karapu@gmail.com");
+			mail.setTo("sureshlucky9131@gmail.com");
+			mail.setSubject("Greetingss..");
+			mail.setText("hello Sureshhh...!");
+			javaMailSender.send(mail);
+		
+		
+	}
+
+}

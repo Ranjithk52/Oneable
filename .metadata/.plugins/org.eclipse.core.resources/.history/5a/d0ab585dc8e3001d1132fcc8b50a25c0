@@ -1,0 +1,100 @@
+package com.ojas.spring.git;
+
+//import java.io.IOException;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//import com.google.gson.Gson;
+//import com.ojas.spring.model.FileContent;
+//
+//import okhttp3.HttpUrl;
+//import okhttp3.OkHttpClient;
+//import okhttp3.Request;
+//import okhttp3.Response;
+//
+//public class GitComments {
+//    private static final String REPOSITORY_OWNER = "Ranjithk52";
+//    private static final String REPOSITORY_NAME = "Practice";
+//    private static final String GITHUB_ACCESS_TOKEN = "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";
+//
+//    public static void main(String[] args) throws IOException {
+//        OkHttpClient client = new OkHttpClient();
+//        HttpUrl url = new HttpUrl.Builder()
+//                .scheme("https")
+//                .host("api.github.com")
+//                .addPathSegment("repos")
+//                .addPathSegment(REPOSITORY_OWNER)
+//                .addPathSegment(REPOSITORY_NAME)
+//                .addPathSegment("issues")
+//                .addQueryParameter("state", "all")
+//                .addQueryParameter("per_page", "100")
+//                .build();
+//
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .header("Authorization", "Bearer " + GITHUB_ACCESS_TOKEN)
+//                .build();
+//
+//        try (Response response = client.newCall(request).execute()) {
+//            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+//
+//            String responseBody = response.body().string();
+//             
+//		    System.out.println(responseBody);
+//		    Gson gson = new Gson();
+//		    
+//		    FileContent fileContent = gson.fromJson(responseBody, FileContent.class);
+//		    List<FileContent> files=new ArrayList<>();
+//		    
+//		    System.out.println(fileContent.getBody());
+//    }
+//}
+//}
+import java.io.IOException;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class GitComments {
+    private static final String REPOSITORY_OWNER = "Ranjithk52";
+    private static final String REPOSITORY_NAME = "Practice";
+    private static final String GITHUB_ACCESS_TOKEN = "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";
+
+    public static void main(String[] args) throws IOException {
+        OkHttpClient client = new OkHttpClient();
+        HttpUrl url = new HttpUrl.Builder()
+                .scheme("https")
+                .host("api.github.com")
+                .addPathSegment("repos")
+                .addPathSegment(REPOSITORY_OWNER)
+                .addPathSegment(REPOSITORY_NAME)
+                .addPathSegment("pulls")
+                .addPathSegment("comments")
+                .addQueryParameter("per_page", "100")
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + GITHUB_ACCESS_TOKEN)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+            String responseBody = response.body().string();
+            System.out.println(responseBody);
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(responseBody);
+
+            for (JsonNode commentNode : jsonNode) {
+                String comment = commentNode.get("body").asText();
+                System.out.println(comment);
+            }
+        }
+    }
+}

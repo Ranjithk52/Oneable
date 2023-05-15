@@ -1,0 +1,5 @@
+package com.ojas.spring.service;
+
+public interface GitService {
+
+}

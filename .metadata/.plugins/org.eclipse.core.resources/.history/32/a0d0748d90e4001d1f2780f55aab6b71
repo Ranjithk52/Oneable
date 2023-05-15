@@ -1,0 +1,95 @@
+package com.ojas.spring.git;
+
+import okhttp3.*;
+//
+//public class GitCompareCommits {
+//    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+//    private static final String API_URL = "https://api.github.com";
+//
+//    private final OkHttpClient client;
+//    private final String token;
+//
+//    public GitCompareCommits(String token) {
+//        this.client = new OkHttpClient();
+//        this.token = token;
+//    }
+//
+//    public String getCommitComparison(String owner, String repo, String base, String head) throws Exception {
+//        String url = String.format("%s/repos/%s/%s/compare/%s...%s", API_URL, owner, repo, base, head);
+//        Request request = new Request.Builder()
+//                .url(url)
+//                .addHeader("Authorization", "token " + token)
+//                .build();
+//
+//        try (Response response = client.newCall(request).execute()) {
+//            if (!response.isSuccessful()) {
+//                throw new Exception("Unexpected response code: " + response.code());
+//            }
+//            return response.body().string();
+//        }
+//    }
+//    public static void main(String[] args) throws Exception {
+//        String token = "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";
+//        GitCompareCommits client = new GitCompareCommits(token);
+//        String owner = "Ranjithk52";
+//        String repo = "Practice";
+//        String base = "master";
+//        String head = "ranjith";
+//        String comparison = client.getCommitComparison(owner, repo, base, head);
+//        System.out.println(comparison);
+//    }
+//
+//}
+import okhttp3.*;
+import org.json.*;
+
+import java.io.IOException;
+
+public class GitCompareCommits {
+    private static final String GITHUB_API_URL = "https://api.github.com/repos/{owner}/{repo}/commits/{sha}";
+
+    private final OkHttpClient client;
+    private final String accessToken;
+
+    public GitCompareCommits(String accessToken) {
+        this.client = new OkHttpClient();
+        this.accessToken = accessToken;
+    }
+
+    public  void fetchCommitChanges(String owner, String repo, String sha) throws IOException {
+        String url = GITHUB_API_URL.replace("{owner}", owner).replace("{repo}", repo).replace("{sha}", sha);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .build();
+        Response response = client.newCall(request).execute();
+        String json = response.body().string();
+        JSONObject commit = new JSONObject(json);
+        JSONArray files = commit.getJSONArray("files");
+        for (int i = 0; i < files.length(); i++) {
+            JSONObject file = files.getJSONObject(i);
+            String filename = file.getString("filename");
+            JSONArray patch = file.getJSONArray("patch");
+            for (int j = 0; j < patch.length(); j++) {
+                String diffLine = patch.getString(j);
+                if (diffLine.startsWith("@@")) {
+                    String[] parts = diffLine.split("\\s+");
+                    String[] startLineParts = parts[1].substring(1).split(",");
+                    int startLine = Integer.parseInt(startLineParts[0]);
+                    int numLines = 1;
+                    if (startLineParts.length > 1) {
+                        numLines = Integer.parseInt(startLineParts[1]);
+                    }
+                    System.out.println(filename + " lines " + startLine + "-" + (startLine + numLines - 1));
+                }
+            }
+        }
+    }
+    public static void main(String[] args) throws IOException {
+    	GitCompareCommits gc=new GitCompareCommits("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");
+    	gc.fetchCommitChanges("Ranjithk52", "Practice", "7935ab15e31e6eecd2ac8bac878227be8542b26c");
+    	
+    }
+}
+
+

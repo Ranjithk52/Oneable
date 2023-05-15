@@ -1,0 +1,8 @@
+package com.ojas.spring.service;
+
+import org.springframework.stereotype.Service;
+
+@Service
+public class Gitservice {
+
+}

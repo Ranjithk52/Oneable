@@ -1,0 +1,22 @@
+package com.ojas.spring.service;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.web.bind.annotation.RequestBody;
+
+import com.ojas.spring.model.Branches;
+import com.ojas.spring.model.GitIntegration;
+
+public interface GitService {
+	
+	public String createRecord(GitIntegration integration);
+	public GitIntegration getRecordbyId(int id);
+	public  String getGitContent(int id) throws IOException;
+	public  int getNoOfLines(GitIntegration gitIntegration) throws IOException;
+	public List<String> getBranchCount(GitIntegration gitIntegration) throws IOException;
+	public int getTotalChanges(GitIntegration integration) throws IOException;
+	public List<String> getCodeReviewComments(GitIntegration integration) throws IOException;
+	public List<String> fetchCommitChanges(@RequestBody GitIntegration integration) throws IOException;
+}

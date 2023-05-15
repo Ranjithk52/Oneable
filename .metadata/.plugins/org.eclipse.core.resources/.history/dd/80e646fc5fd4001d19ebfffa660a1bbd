@@ -1,0 +1,22 @@
+package com.ojas.spring;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.Scheduled;
+
+@SpringBootApplication
+public class GitApiIntegrationApplication {
+	
+	@Scheduled(cron = "*/5 0 0 0 0 0")
+	public static void scheduledJob() {
+		
+		System.out.println("From Schedulerr....!");
+	}
+
+	public static void main(String[] args) {
+		SpringApplication.run(GitApiIntegrationApplication.class, args);
+		
+		scheduledJob();
+	}
+
+}

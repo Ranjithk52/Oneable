@@ -1,0 +1,5 @@
+package com.ojas.spring.git;
+
+public class GitCompareCommits {
+
+}

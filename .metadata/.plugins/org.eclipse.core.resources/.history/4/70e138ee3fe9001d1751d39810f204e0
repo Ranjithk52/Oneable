@@ -1,0 +1,34 @@
+package com.ojas.spring.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.ojas.spring.model.GitIntegration;
+import com.ojas.spring.repository.Gitrepository;
+
+@Service
+public class Gitservice {
+	@Autowired
+	private Gitrepository gitrepository;
+	
+	public String createRecord(GitIntegration integration) {
+		GitIntegration integration2=gitrepository.save(integration);
+		if(integration2!=null) {
+			return "Successfully Record Inserted..!";
+		}else {
+			return "Record not Inserted...try Again..";
+		}	
+	}
+	
+	public Optional<GitIntegration> getRecordbyId(int id) {
+		
+		return gitrepository.findById(id);
+		
+		
+		
+	}
+	
+
+}

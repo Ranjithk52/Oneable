@@ -1,0 +1,39 @@
+package com.example.demo.model;
+
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document
+
+public class Employee {
+	private String e_name;
+	private String role;
+	private double e_sal;
+	public String getE_name() {
+		return e_name;
+	}
+	public void setE_name(String e_name) {
+		this.e_name = e_name;
+	}
+	public String getRole() {
+		return role;
+	}
+	public void setRole(String role) {
+		this.role = role;
+	}
+	public double getE_sal() {
+		return e_sal;
+	}
+	public void setE_sal(double e_sal) {
+		this.e_sal = e_sal;
+	}
+	public Employee(String e_name, String role, double e_sal) {
+		
+		this.e_name = e_name;
+		this.role = role;
+		this.e_sal = e_sal;
+	}
+	public Employee() {
+		
+	}
+}

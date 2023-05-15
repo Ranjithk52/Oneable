@@ -1,0 +1,103 @@
+package com.ojas.spring.git;
+
+import java.io.IOException;
+import java.util.Base64;
+
+import javax.mail.internet.MimeUtility;
+
+import com.google.gson.Gson;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+public class GitApiClientExample {
+
+    public static void main(String[] args) throws IOException {
+        String GitHub_Api_BASEURL = "https://api.github.com/";
+       
+
+        String owner = "Ranjithk52"; // replace with actual username
+        String repo = "Practice"; // replace with actual repository name
+        String path = "src/main/java/com/ojas1/Calculate.java"; // replace with actual project path
+
+        String accessToken = "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"; // replace with actual access token
+
+        OkHttpClient client = new OkHttpClient();
+
+
+        String url=GitHub_Api_BASEURL+"repos/"+owner+"/"+repo+"/contents/"+path;
+		Request request=new Request.Builder()
+		.url(url)
+		.header("Authorization", "Bearer"+accessToken)
+		.build();
+
+        Response response = client.newCall(request).execute();
+
+        if (response.isSuccessful()) {
+            String responseData = response.body().string();
+            System.out.println(responseData);
+            Gson gson = new Gson();
+            FileContent fileContent = gson.fromJson(responseData, FileContent.class);
+            //System.out.println(fileContent.name);
+            //System.out.println(fileContent.path);
+            //System.out.println(fileContent.sha);
+            //System.out.println(fileContent.content);
+            
+            //String fileContentEncoded = MimeUtility.decodeText(fileContent.getContent());
+            //System.out.println(fileContentEncoded);
+            String fileContentDecoded = decodeBase64(fileContent.content);
+           // System.out.println("File Name: " + fileContent.getName());
+            //System.out.println("File Path: " + fileContent.getPath());
+           // System.out.println("File SHA: " + fileContent.getSha());
+            //System.out.println("File Content:\n" + fileContentDecoded);
+            
+         
+            String[] lines = fileContentDecoded.split("\r?\n");
+
+            // Print number of lines
+            //System.out.println("Number of lines: " + lines.length);
+            // process the file content as needed
+        } else {
+            System.out.println("Error: " + response.code() + " - " + response.message());
+        }
+    }
+    public static String decodeBase64(String encoded) {
+        // Remove any non-alphabet characters from the encoded string
+        encoded = encoded.replaceAll("[^A-Za-z0-9+/=]", "");
+        
+        // Decode the Base64 string
+        byte[] decodedBytes = Base64.getDecoder().decode(encoded);
+        return new String(decodedBytes);
+    }
+
+
+    public static class FileContent {
+        private String name;
+        private String path;
+        private String sha;
+        private String content;
+
+        public String getName() {
+            return name;
+        }
+
+        public String getPath() {
+            return path;
+        }
+
+        public String getSha() {
+            return sha;
+        }
+
+        public String getContent() {
+            return content;
+        }
+    }
+}
+
+
+
+
+
+

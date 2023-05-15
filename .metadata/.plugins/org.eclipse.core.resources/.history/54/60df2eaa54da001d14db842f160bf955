@@ -1,0 +1,49 @@
+package com.ojas.spring.git;
+
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.eclipse.jgit.transport.http.HttpConnection;
+import org.eclipse.jgit.transport.Transport;
+import org.eclipse.jgit.transport.TransportHttp;
+import org.eclipse.jgit.transport.URIish;
+
+import java.io.IOException;
+import java.util.List;
+
+public class GitCommentsFetcher {
+
+    public static void main(String[] args) throws IOException, GitAPIException {
+        // Replace these values with your own credentials and repository URL
+        String username = "your-username";
+        String password = "your-password";
+        String remoteUrl = "https://github.com/your-username/your-repo.git";
+        String branchName = "your-branch-name";
+
+        try (Repository repository = new org.eclipse.jgit.storage.file.FileRepositoryBuilder().build()) {
+            CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(username, password);
+
+            TransportHttp transport = (TransportHttp) Transport.open(repository, new URIish(remoteUrl));
+            transport.setCredentialsProvider(credentialsProvider);
+            ((HttpConnection) transport).setReadTimeout(5 * 1000);
+            ((HttpConnection) transport).setConnectTimeout(5 * 1000);
+            transport.connect(branchName);
+
+            ObjectId head = ((Object) transport.openFetch()).setRemoteBranchName(branchName).call();
+            List<RevCommit> commits = transport.openRevWalk(head).toList();
+
+            for (RevCommit revCommit : commits) {
+                System.out.println("Commit message: " + revCommit.getFullMessage());
+                // Access comments and feedback using revCommit.getComments() and revCommit.getFooterLines()
+            }
+
+            transport.close();
+        }
+    }
+}
+
+
+

@@ -1,0 +1,5 @@
+package com.ojas.mongodb.model;
+
+public class Employee {
+
+}

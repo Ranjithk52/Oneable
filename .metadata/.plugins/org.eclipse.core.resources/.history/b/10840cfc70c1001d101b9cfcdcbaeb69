@@ -1,0 +1,5 @@
+package com.ojas.mongo.model;
+
+public class Tools {
+
+}

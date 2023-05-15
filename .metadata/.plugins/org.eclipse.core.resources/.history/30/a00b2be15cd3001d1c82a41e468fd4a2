@@ -1,0 +1,10 @@
+package com.ojas.spring.git;
+
+import java.io.IOException; 
+import org.eclipse.jgit.api.Git; 
+import org.eclipse.jgit.api.errors.GitAPIException; 
+import org.eclipse.jgit.lib.Repository; 
+import org.eclipse.jgit.revwalk.RevCommit; 
+public class GitComments {
+	public static void main(String[] args) throws IOException, GitAPIException { // Replace this with the path to your Git repository String repoPath = "/path/to/repository"; try (Repository repo = Git.open(new File(repoPath)).getRepository()) { try (Git git = new Git(repo)) { Iterable<RevCommit> commits = git.log().setMaxCount(10).call(); for (RevCommit commit : commits) { System.out.println(commit.getFullMessage()); } } } } }
+}

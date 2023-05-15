@@ -1,0 +1,42 @@
+package com.ojas.spring.git;
+
+
+import java.io.IOException;
+import java.util.List;
+
+import com.ojas.spring.model.Branches;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+
+public class GitReview {
+	static String GitHub_Api_BASEURL = "https://api.github.com/";
+    
+
+	   static  String user = "Ranjithk52"; 
+	   static String repo = "Practice"; 
+	   static String path = "src/main/java/com/ojas1/Calculate.java";
+
+	   static String accessToken = "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";
+
+
+
+	   public static void main(String[] args) throws IOException {
+		   OkHttpClient client = new OkHttpClient(); 
+			// List<Branches> branches=null; 
+			 String url = GitHub_Api_BASEURL + "repos/" + user + "/" + repo + "/branches"; 
+			 Request request = new Request.Builder() 
+					 .url(url) 
+					 .header("Authorization", "token " + accessToken) 
+					 .build(); 
+			 Response response = client.newCall(request).execute(); 
+			 System.out.println(response+" hello");
+			
+			 if (response.isSuccessful()) { 
+		    String responseData = response.body().string(); 
+		    System.out.println(responseData+" data");
+	 }
+	   }
+}

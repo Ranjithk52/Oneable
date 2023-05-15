@@ -1,0 +1,88 @@
+package com.ojas.spring.git;
+
+import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.PullRequest;
+import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryId;
+import org.eclipse.egit.github.core.service.PullRequestService;
+import org.eclipse.egit.github.core.service.RepositoryService;
+
+import java.io.IOException;
+import java.util.List;
+import org.kohsuke.github.*;
+import org.eclipse.egit.github.core.Comment;
+public class GitReview {
+//
+//    private static final String USER_NAME = "Ranjithk52";
+//    private static final String PASSWORD = "Udwitha@2019";
+//    private static final String REPO_OWNER = "Ranjith Kumar";
+//    private static final String REPO_NAME = "Practice";
+//    private static final int PULL_REQUEST_NUMBER = 1;
+//
+//    public static void main(String[] args) throws IOException {
+//        // Create a repository service
+//        RepositoryService repoService = new RepositoryService();
+//        repoService.getClient().setCredentials(USER_NAME, PASSWORD);
+//
+//        // Get the repository by owner and name
+//        RepositoryId repoId = new RepositoryId(REPO_OWNER, REPO_NAME);
+//        Repository repo = repoService.getRepository(repoId);
+//
+//        // Create a pull request service
+//        PullRequestService prService = new PullRequestService();
+//        prService.getClient().setCredentials(USER_NAME, PASSWORD);
+//
+//        // Get the pull request by number
+//        PullRequest pr = prService.getPullRequest(repo, PULL_REQUEST_NUMBER);
+//
+//        // Get the comments on the pull request
+//        List<CommitComment> comments = prService.getComments(repo, PULL_REQUEST_NUMBER);
+//
+//        // Print the comments
+//        for (CommitComment comment : comments) {
+//            System.out.println(comment.getBody());
+//        }
+//    }
+//}
+
+
+
+
+//public class GitReview {
+//    public static void main(String[] args) throws Exception {
+//        String token = "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";
+//        GitHub github = new GitHubBuilder().withOAuthToken(token).build();
+//        GHRepository repo = github.getRepository("Ranjithk52/Practice");
+//        GHPullRequest pr = repo.getPullRequest(1);
+//
+//        for (GHPullRequestReview review : pr.listReviews()) {
+//            for (GHPullRequestReviewComment comment : review.listReviewComments()) {
+//                System.out.println(comment.getUser().getLogin() + ": " + comment.getBody());
+//            }
+//        }
+//    }
+//}
+	
+
+
+	
+	    public static void main(String[] args) throws IOException {
+	        // Set up a connection to the GitHub API
+	        RepositoryService repositoryService = new RepositoryService();
+	        repositoryService.getClient().setOAuth2Token("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");
+
+	        // Identify the repository and pull request you want to access
+	        RepositoryId repositoryId = new RepositoryId("Ranjith Kumar", "Practice");
+	        int pullRequestId = 1;
+
+	        // Get the pull request service and retrieve all comments on the pull request
+	        PullRequestService pullRequestService = new PullRequestService();
+	        List<CommitComment> comments = pullRequestService.getComments(repositoryId, pullRequestId);
+
+	        // Print out the comments
+	        for (Comment comment : comments) {
+	            System.out.println(comment.getBody());
+	        }
+	    }
+	}
+

@@ -1,0 +1,53 @@
+package com.ojas.socket;
+
+import java.io.*;
+import java.net.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+public class ServerThreadpool {
+    private static ExecutorService threadPool = Executors.newFixedThreadPool(10);
+
+    public static void main(String[] args) {
+        try {
+            // create a server socket object and start listening for client connections
+            ServerSocket serverSocket = new ServerSocket(8383);
+            int counter=0;
+            System.out.println("Server started on port 8383...");
+//            while (true) {
+//           	 counter++;
+//               // accept a new client connection
+//               Socket clientSocket = serverSocket.accept();
+//              // System.out.println("Accepted new client connection...");
+//               System.out.println(" >> "+"Client No:"+ counter + "started!");
+//               // add the client socket and output stream to the lists
+//               clientSockets.add(clientSocket);
+//               clientOutputStreams.add(clientSocket.getOutputStream());
+//
+//               // create a new thread to handle the client connection
+//               //Thread clientThread = new Thread(new ClientHandler(clientSocket));
+//               ServerClientThread sct=new ServerClientThread(clientSocket,counter);
+//               sct.start();
+//           }
+
+            while (true) {
+            	 counter++;
+                // accept a new client connection
+                Socket clientSocket = serverSocket.accept();
+                System.out.println("Accepted new client connection...");
+                System.out.println(" >> "+"Client No:"+ counter + "started!");
+                // submit a new task to the thread pool to handle the client connection
+                threadPool.submit(new ServerClientThread(clientSocket,counter));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+//    private static void sendResponse(String response, OutputStream outputStream) throws IOException {
+//        outputStream.write(response.getBytes());
+//        outputStream.flush();
+//    }
+
+ 

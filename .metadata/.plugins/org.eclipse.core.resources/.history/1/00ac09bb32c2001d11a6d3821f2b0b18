@@ -1,0 +1,14 @@
+package com.example.demo.model;
+
+import java.sql.Date;
+
+public class PmTool {
+    private String toolName;
+    private String url;
+    private String username;
+    private String apiToken;
+    private boolean isActive;
+    private String connectionName;
+    private Date createdDate;
+    // getters and setters
+}

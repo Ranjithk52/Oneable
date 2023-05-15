@@ -1,0 +1,26 @@
+package com.ojas.spring.git;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+
+public class InvoiceGenerator {
+
+		public static void main(String [] args){
+
+		Random random=new Random();
+
+		int number=random.nextInt();
+
+		LocalDateTime current=LocalDateTime.now();
+
+		DateTimeFormatter format=DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+		String dateformat=current.format(format);
+
+		System.out.println(number+" - "+dateformat);
+
+		}
+
+}
+

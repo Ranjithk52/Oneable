@@ -1,0 +1,43 @@
+package com.ojas.spring.git;
+
+import okhttp3.*;
+
+public class GitCompareCommits {
+    private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+    private static final String API_URL = "https://api.github.com";
+
+    private final OkHttpClient client;
+    private final String token;
+
+    public GitCompareCommits(String token) {
+        this.client = new OkHttpClient();
+        this.token = token;
+    }
+
+    public String getCommitComparison(String owner, String repo, String base, String head) throws Exception {
+        String url = String.format("%s/repos/%s/%s/compare/%s...%s", API_URL, owner, repo, base, head);
+        Request request = new Request.Builder()
+                .url(url)
+                .addHeader("Authorization", "token " + token)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new Exception("Unexpected response code: " + response.code());
+            }
+            return response.body().string();
+        }
+    }
+    public static void main(String[] args) throws Exception {
+        String token = "your_github_access_token_here";
+        GitCompareCommits client = new GitCompareCommits(token);
+        String owner = "octocat";
+        String repo = "hello-world";
+        String base = "master";
+        String head = "feature-branch";
+        String comparison = client.getCommitComparison(owner, repo, base, head);
+        System.out.println(comparison);
+    }
+
+}
+

@@ -1,0 +1,21 @@
+package com.ojas.mongodb.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.ojas.mongodb.model.Employee;
+import com.ojas.mongodb.service.EmployeeService;
+
+@RestController
+public class EmployeeController {
+	@Autowired
+	private EmployeeService employeeService;
+	
+	public String createEmployee(@RequestBody Employee emp) {
+	return employeeService.insertEmployee(emp);
+		
+	}
+
+	
+}

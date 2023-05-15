@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+</head>
+<body>
+<form action="Calculate">
+Enter number1=<input type="text" name="num1"/></br>
+Enter number2=<input type="text" name="num2"/>
+<button type="submit" name="Add" value=addition>ADD</button>
+<button type="submit" name="Sub" value=subtraction>SUB</button>
+</form>
+</body>
+</html>

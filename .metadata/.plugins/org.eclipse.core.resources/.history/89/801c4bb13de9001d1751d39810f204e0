@@ -1,0 +1,7 @@
+package com.ojas.spring.repository;
+
+import org.springframework.data.mongodb.MongoDbFactory;
+
+public interface Gitrepository extends MongoDbFactory {
+
+}

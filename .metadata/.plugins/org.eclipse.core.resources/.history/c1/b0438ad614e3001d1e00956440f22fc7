@@ -1,0 +1,102 @@
+package com.ojas.spring.git;
+
+import org.eclipse.egit.github.core.CommitComment;
+import org.eclipse.egit.github.core.PullRequest;
+import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryId;
+import org.eclipse.egit.github.core.service.GitHubService;
+import org.eclipse.egit.github.core.service.PullRequestService;
+import org.eclipse.egit.github.core.service.RepositoryService;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.List;
+import org.kohsuke.github.*;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.ojas.spring.model.Branches;
+import com.ojas.spring.model.Commit;
+import com.ojas.spring.model.FileContent;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
+import org.eclipse.egit.github.core.Comment;
+public class GitReview {
+	static String GitHub_Api_BASEURL = "https://api.github.com/";
+    
+
+	   static  String user = "Ranjithk52"; 
+	   static String repo = "Practice"; 
+	   static String path = "src/main/java/com/ojas1/Calculate.java";
+
+	   static String accessToken = "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";
+
+
+//
+//	    public static void main(String[] args) throws IOException {
+//	        // Set up a connection to the GitHub API
+//	        RepositoryService repositoryService = new RepositoryService();
+//	        repositoryService.getClient().setOAuth2Token("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");
+//
+//	        // Identify the repository and pull request you want to access
+//	        RepositoryId repositoryId = new RepositoryId("Ranjithk52", "Practice");
+//	        int pullRequestId = 1;
+//
+//	        // Get the pull request service and retrieve all comments on the pull request
+//	        PullRequestService pullRequestService = new PullRequestService();
+//	        List<CommitComment> comments = pullRequestService.getComments(repositoryId, pullRequestId);
+//
+//	        // Create a Gson object to parse the JSON response
+//	        Gson gson = new Gson();
+//
+//	        // Parse each comment as a Comment object
+//	        for (Comment comment : comments) {
+//	            String json = gson.toJson(comment);
+//	            Comment parsedComment = gson.fromJson(json, Comment.class);
+//	            System.out.println(parsedComment.getBody());
+//	    }
+//	}
+	   public static void main(String[] args) throws IOException {
+	 OkHttpClient client = new OkHttpClient(); 
+	 //List<Branches> branches=null; 
+	 
+	 String url = GitHub_Api_BASEURL + user +"/"+ repo +"/pull/2"; 
+	 Request request = new Request.Builder() 
+			 .url(url) 
+			 .header("Authorization", "token " + accessToken) 
+			 .build(); 
+	 Response response = client.newCall(request).execute(); 
+	 System.out.println(response);
+	
+	 if (response.isSuccessful()) { 
+    String responseData = response.body().string(); 
+    System.out.println(responseData);
+//	 Gson gson = new Gson(); 
+//	 Type type = new TypeToken<List<Branches>>() { }.getType(); 
+//	 branches = gson.fromJson(responseData, type); 
+//	 System.out.println(branches.size());
+		// Set up a connection to the GitHub API
+//		   GitHubClient client = new GitHubClient();
+//		   client.setOAuth2Token("<your access token>");
+//		   GitHubService service = new GitHubService(client);
+//
+//		   // Identify the repository and pull request you want to access
+//		   String owner = "<repository owner>";
+//		   String repo = "<repository name>";
+//		   int pullRequestId = <pull request ID>;
+//
+//		   // Retrieve the comments on the pull request
+//		   List<ReviewComment> comments = service.getPullRequestComments(owner, repo, pullRequestId);
+//
+//		   // Print out the comments
+//		   for (ReviewComment comment : comments) {
+//		       System.out.println(comment.getBody());
+//		   }
+
+	
+	
+	 }
+	   }
+}
